@@ -1,3 +1,4 @@
+import os
 from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableWithMessageHistory, RunnableLambda
@@ -7,7 +8,12 @@ from langchain_community.embeddings import DashScopeEmbeddings
 import config_data as config
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_community.chat_models.tongyi import ChatTongyi
+import streamlit as st
 
+if hasattr(st, 'secrets') and 'DASHSCOPE_API_KEY' in st.secrets:
+    dashscope_api_key = st.secrets["DASHSCOPE_API_KEY"]
+else:
+    dashscope_api_key = os.getenv("DASHSCOPE_API_KEY")
 
 def print_prompt(prompt):
     print("="*20)
@@ -21,7 +27,7 @@ class RagService(object):
     def __init__(self):
 
         self.vector_service = VectorStoreService(
-            embedding=DashScopeEmbeddings(model=config.embedding_model_name)
+            embedding=DashScopeEmbeddings(model=config.embedding_model_name,dashscope_api_key=dashscope_api_key)
         )
 
         self.prompt_template = ChatPromptTemplate.from_messages(
@@ -34,7 +40,7 @@ class RagService(object):
             ]
         )
 
-        self.chat_model = ChatTongyi(model=config.chat_model_name)
+        self.chat_model = ChatTongyi(model=config.chat_model_name,api_key=dashscope_api_key)
 
         self.chain = self.__get_chain()
 
