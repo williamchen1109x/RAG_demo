@@ -120,7 +120,7 @@ st.markdown('''
 <div class="welcome-card">
     <div class="welcome-icon">📖</div>
     <p class="welcome-text" style="font-size: 1.3rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">使用指南</p>
-    <p class="welcome-text" style="text-align: left; line-height: 2;">1️⃣ 首先需要上传你的个人文件<br>2️⃣ 切换到智能客服询问相关问题</p>
+    <p class="welcome-text" style="text-align: left; line-height: 2;">1️⃣ 首先需要上传你的个人文件<br>2️⃣ 点击左上角的">>"切换到智能客服询问相关问题</p>
 </div>
 ''', unsafe_allow_html=True)
 st.markdown('<p class="label">📎 请上传 TXT 文件</p>', unsafe_allow_html=True)
