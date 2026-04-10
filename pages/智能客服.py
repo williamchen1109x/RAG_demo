@@ -11,11 +11,25 @@ st.markdown("""
 /* 侧边栏导航标题 */
 [data-testid="stSidebarHeader"]::before {
     content: "导航";
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: bold;
     position: absolute;
-    left: 0.5rem;
-    top: 1rem;
+    left: 1rem;
+    top: 0.8rem;
+}
+
+/* 侧边栏页面名称 - 响应式字体 */
+[data-testid="stSidebarNav"] a {
+    font-size: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    [data-testid="stSidebarNav"] a {
+        font-size: 1.4rem;
+    }
+    [data-testid="stSidebarHeader"]::before {
+        font-size: 1.4rem;
+    }
 }
 
 /* 全局背景 */
