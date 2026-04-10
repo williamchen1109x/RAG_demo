@@ -5,6 +5,19 @@ from konwledge_base import KnowledgeBaseService
 
 st.set_page_config(page_title="知识库更新服务")
 
+st.markdown("""
+<style>
+[data-testid="stSidebarHeader"]::before {
+    content: "导航";
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: absolute;
+    left: 0.5rem;
+    top: 1rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title("知识库更新服务")
 
 uploader_file = st.file_uploader(

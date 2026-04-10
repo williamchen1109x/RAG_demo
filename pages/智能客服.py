@@ -5,6 +5,19 @@ import config_data as config
 
 st.set_page_config(page_title="智能客服")
 
+st.markdown("""
+<style>
+[data-testid="stSidebarHeader"]::before {
+    content: "导航";
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: absolute;
+    left: 0.5rem;
+    top: 1rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # 标题
 st.title("智能客服")
 st.divider()            # 分隔符
