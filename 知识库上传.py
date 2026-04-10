@@ -1,7 +1,9 @@
 import time
+import io
 
 import streamlit as st
 from konwledge_base import KnowledgeBaseService
+from docx import Document
 
 st.set_page_config(page_title="知识库更新服务", layout="wide")
 
@@ -137,13 +139,13 @@ st.markdown('''
     <p class="welcome-text" style="text-align: left; line-height: 2;">1️⃣ 首先需要上传你的个人文件<br>2️⃣ 点击左上角的">>"切换到智能客服询问相关问题</p>
 </div>
 ''', unsafe_allow_html=True)
-st.markdown('<p class="label">📎 请上传 TXT 文件</p>', unsafe_allow_html=True)
+st.markdown('<p class="label">📎 请上传 TXT / Word / PDF / Excel 文件</p>', unsafe_allow_html=True)
 
 uploader_file = st.file_uploader(
     "选择文件",
-    type=['txt'],
+    type=['txt', 'docx', 'pdf', 'xlsx'],
     accept_multiple_files=False,
-    help="点击按钮选择文件上传",
+    help="支持 .txt、.docx、.pdf、.xlsx 格式",
     label_visibility="collapsed"
 )
 
@@ -152,8 +154,32 @@ if "service" not in st.session_state:
 
 if uploader_file is not None:
     file_name = uploader_file.name
-    file_type = uploader_file.type
     file_size = uploader_file.size / 1024
+
+    # 根据文件类型读取内容
+    if file_name.endswith('.docx'):
+        doc = Document(io.BytesIO(uploader_file.read()))
+        text = "\n".join([p.text for p in doc.paragraphs])
+        file_type = "Word 文档"
+    elif file_name.endswith('.pdf'):
+        import pdfplumber
+        with pdfplumber.open(io.BytesIO(uploader_file.read())) as pdf:
+            text = "\n".join([p.extract_text() or "" for p in pdf.pages])
+        file_type = "PDF 文档"
+    elif file_name.endswith('.xlsx'):
+        import openpyxl
+        wb = openpyxl.load_workbook(io.BytesIO(uploader_file.read()))
+        lines = []
+        for sheet in wb:
+            for row in sheet.iter_rows(values_only=True):
+                line = " | ".join([str(cell) if cell is not None else "" for cell in row])
+                if line.strip():
+                    lines.append(line)
+        text = "\n".join(lines)
+        file_type = "Excel 表格"
+    else:
+        text = uploader_file.getvalue().decode("utf-8")
+        file_type = "文本文件"
 
     st.markdown(f'''
     <div class="file-info">
@@ -161,8 +187,6 @@ if uploader_file is not None:
         <p>格式：{file_type} | 大小：{file_size:.2f} KB</p>
     </div>
     ''', unsafe_allow_html=True)
-
-    text = uploader_file.getvalue().decode("utf-8")
 
     with st.spinner("🔄 载入知识库中..."):
         time.sleep(1)
