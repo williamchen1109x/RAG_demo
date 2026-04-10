@@ -3,6 +3,8 @@ from rag import RagService
 import streamlit as st
 import config_data as config
 
+st.set_page_config(page_title="智能客服")
+
 # 标题
 st.title("智能客服")
 st.divider()            # 分隔符

@@ -3,12 +3,15 @@ import time
 import streamlit as st
 from konwledge_base import KnowledgeBaseService
 
+st.set_page_config(page_title="知识库更新服务")
+
 st.title("知识库更新服务")
 
 uploader_file = st.file_uploader(
     "请上传TXT文件",
-    type= ['txt'],
-    accept_multiple_files= False,
+    type=['txt'],
+    accept_multiple_files=False,
+    help="点击按钮选择文件上传",
 )
 
 if "service" not in st.session_state:
